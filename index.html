@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Build Zone - Where ideas survive the market</title>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Base styles and reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+  font-family: "VT323", monospace;
+        }
+
+        :root {
+            --dark-bg: #0a0a0a;
+            --card-bg: rgba(20, 20, 20, 0.85);
+            --accent: rgba(255, 255, 255, 0.95);
+            --accent-dim: rgba(255, 255, 255, 0.6);
+            --accent-faint: rgba(255, 255, 255, 0.15);
+            --gold: #d4af37;
+            --error: #ff6b6b;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--accent);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Background with image */
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(rgba(10, 10, 10, 0.85), rgba(10, 10, 10, 0.9)),
+                url('a.png');
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+        }
+
+        /* Layout */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 5rem;
+            min-height: 100vh;
+            align-items: center;
+        }
+
+        /* Left side styling */
+        .left-side {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+            padding: 2rem 0;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 3rem;
+        }
+
+        .logo {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1.5rem;
+            font-weight: 300;
+            font-size: 1.2rem;
+            color: var(--accent-dim);
+            border: 1px solid var(--accent-faint);
+            overflow: hidden;
+        }
+
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .title-section h1 {
+            font-size: 4rem;
+            font-weight: 300;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+            line-height: 1.1;
+            background: linear-gradient(to right, #fff, #aaa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .title-section .subtitle {
+            font-size: 1.3rem;
+            color: var(--accent-dim);
+            margin-bottom: 2.5rem;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+
+        .separator {
+            width: 120px;
+            height: 1px;
+            background: linear-gradient(to right, var(--accent-faint), transparent);
+            margin: 2.5rem 0;
+        }
+
+        .what-we-do h2 {
+            font-size: 1.6rem;
+            font-weight: 400;
+            margin-bottom: 1.5rem;
+            letter-spacing: 1px;
+        }
+
+        .what-we-do p {
+            color: var(--accent-dim);
+            font-weight: 300;
+            max-width: 450px;
+            line-height: 1.7;
+            font-size: 1.1rem;
+        }
+
+        .twitter-link {
+            margin-top: 3rem;
+            display: inline-flex;
+            align-items: center;
+            color: var(--accent-dim);
+            text-decoration: none;
+            transition: var(--transition);
+            font-size: 1.1rem;
+        }
+
+        .twitter-link:hover {
+            color: var(--accent);
+            transform: translateX(5px);
+        }
+
+        .twitter-link i {
+            margin-right: 0.8rem;
+            font-size: 1.3rem;
+        }
+
+        /* Right side styling */
+        .right-side {
+            display: flex;
+            flex-direction: column;
+            height: 90vh;
+            overflow: hidden;
+        }
+
+        .idea-terminal {
+            background: rgb(20 20 20 / 13%);
+            border: 1px solid var(--accent-faint);
+            border-radius: 8px;
+            padding: 2.5rem;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .idea-terminal h2 {
+            font-size: 1.8rem;
+            font-weight: 400;
+            margin-bottom: 2rem;
+            text-align: center;
+            letter-spacing: 1px;
+            color: var(--accent);
+        }
+
+        .input-row {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group {
+            flex: 1;
+        }
+
+        .input-group.full-width {
+            flex: 0 0 100%;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.7rem;
+            color: var(--accent-dim);
+            font-size: 0.95rem;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+
+        .input-group input,
+        .input-group textarea {
+            width: 100%;
+            background: rgba(15, 15, 15, 0.7);
+            border: 1px solid var(--accent-faint);
+            border-radius: 4px;
+            padding: 1rem 1.2rem;
+            color: var(--accent);
+            font-size: 1rem;
+            transition: var(--transition);
+            font-weight: 300;
+        }
+
+        .input-group input:focus,
+        .input-group textarea:focus {
+            outline: none;
+            border-color: var(--accent-dim);
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+        }
+
+        .input-group textarea {
+            min-height: 140px;
+            resize: vertical;
+            line-height: 1.5;
+        }
+
+        .input-error {
+            border-color: var(--error) !important;
+        }
+
+        .error-message {
+            color: var(--error);
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: transparent;
+            color: var(--accent);
+            border: 1px solid var(--accent-faint);
+            border-radius: 4px;
+            padding: 1.2rem;
+            font-size: 1.1rem;
+            font-weight: 400;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 1rem;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--accent-dim);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .submit-btn:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: 0.5s;
+        }
+
+        .submit-btn:hover:after:not(:disabled) {
+            left: 100%;
+        }
+
+        /* Ideas display area */
+        .ideas-display {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 0.5rem;
+        }
+
+        .ideas-display h3 {
+            font-size: 1.3rem;
+            font-weight: 400;
+            margin-bottom: 1.5rem;
+            color: var(--accent-dim);
+            letter-spacing: 1px;
+        }
+
+        .idea-card {
+            background: var(--card-bg);
+            border: 1px solid var(--accent-faint);
+            border-radius: 6px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            animation: fadeIn 0.5s ease;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .idea-card:hover {
+            border-color: var(--accent-dim);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .idea-card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--gold), transparent);
+            border-radius: 4px 0 0 4px;
+        }
+
+        .idea-text {
+            margin-bottom: 1.5rem;
+            font-weight: 300;
+            line-height: 1.6;
+            font-size: 1.05rem;
+        }
+
+        .idea-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: var(--accent-dim);
+        }
+
+        .idea-meta .twitter-handle {
+            color: var(--accent-dim);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .idea-meta .twitter-handle:hover {
+            color: var(--accent);
+        }
+
+        .idea-meta .wallet {
+            font-family: monospace;
+            color: var(--accent-dim);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .idea-meta .wallet:hover {
+            color: var(--accent);
+        }
+
+        /* Scrollbar styling */
+        .ideas-display::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .ideas-display::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .ideas-display::-webkit-scrollbar-thumb {
+            background: var(--accent-faint);
+            border-radius: 10px;
+        }
+
+        .ideas-display::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-dim);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.1); }
+            70% { box-shadow: 0 0 0 15px rgba(255, 255, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+        }
+
+        .pulse {
+            animation: pulse 1.2s;
+        }
+
+        /* Responsive design */
+        @media (max-width: 1100px) {
+            .container {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+            
+            .left-side {
+                padding: 1rem 0;
+            }
+            
+            .title-section h1 {
+                font-size: 3rem;
+            }
+            
+            .right-side {
+                height: auto;
+                min-height: 70vh;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 1.5rem;
+            }
+            
+            .input-row {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .title-section h1 {
+                font-size: 2.5rem;
+            }
+            
+            .idea-terminal {
+                padding: 2rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background"></div>
+    
+    <div class="container">
+        <div class="left-side">
+            <div class="logo-container">
+                <div class="logo">
+                    <!-- Replace with your logo.png path -->
+                    <img src="Testo del paragrafo (3).png" alt="Build Zone Logo">
+                </div>
+                <a href="https://x.com/BuildDotZone" class="twitter-link" target="_blank">
+                    <i class="fab fa-twitter"></i>
+                    @BuildDotZone
+                </a>
+            </div>
+            
+            <div class="title-section">
+                <h1>Build Zone</h1>
+                <div class="subtitle">Where ideas survive the market.</div>
+            </div>
+            
+            <div class="separator"></div>
+            
+            <div class="what-we-do">
+                <h2>What We Do</h2>
+                <p>Build Zone is a digital cathedral on the chain sacred space where creators consecrate their ideas. Here, concepts are built, memorialized, and sometimes laid to rest. Each submission becomes part of our eternal archive, a testament to the creative process itself.</p>
+            </div>
+        </div>
+        
+        <div class="right-side">
+            <div class="idea-terminal">
+                <h2>Submit to the Zone</h2>
+                
+                <form id="idea-form">
+                    <div class="input-group full-width">
+                        <label for="idea">Your Idea</label>
+                        <textarea id="idea" placeholder="Describe your creation with clarity and purpose..." required></textarea>
+                    </div>
+                    
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label for="twitter">Your Twitter Profile URL</label>
+                            <input type="url" id="twitter" placeholder="https://x.com/" required>
+                            <div class="error-message" id="twitter-error">Please enter a valid Twitter/X URL</div>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="wallet">Your Solana Wallet Address</label>
+                            <input type="text" id="wallet" placeholder="7xRLU...Y9p2k" required>
+                            <div class="error-message" id="wallet-error">Please enter a valid Solana wallet address (32-44 characters)</div>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn" id="submit-btn">Send It to the Zone</button>
+                </form>
+            </div>
+            
+            <div class="ideas-display">
+                <h3>Recent Offerings</h3>
+                
+                <div id="ideas-container">
+                    <!-- Pre-populated ideas -->
+                    <div class="idea-card">
+                        <div class="idea-text">A decentralized platform that turns creative briefs into smart contracts, automatically distributing royalties to all contributors based on their input percentage.</div>
+                        <div class="idea-meta">
+                            <a href="https://x.com/" target="_blank" class="twitter-handle">@Tibis2</a>
+                            <a href="https://solscan.io/account/7xRLUa8XuGLqpzxkL7W34Y6Y6NB9ZF9Rc7YJkFCa5Y9p2k" target="_blank" class="wallet">7xRLU...Y9p2k</a>
+                        </div>
+                    </div>
+                    
+                    <div class="idea-card">
+                        <div class="idea-text">An NFT series where each piece evolves based on market sentiment, creating a living artwork that reflects its own economic journey.</div>
+                        <div class="idea-meta">
+                            <a href="https://x.com/solana" target="_blank" class="twitter-handle">@Dev</a>
+                            <a href="https://solscan.io/account/5Q544fKrFoe6tsEbD7S8EmxGTJYAKtTVhAW5Q5pge4j1" target="_blank" class="wallet">5Q544...ge4j1</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('idea-form');
+            const ideasContainer = document.getElementById('ideas-container');
+            const twitterInput = document.getElementById('twitter');
+            const walletInput = document.getElementById('wallet');
+            const twitterError = document.getElementById('twitter-error');
+            const walletError = document.getElementById('wallet-error');
+            const submitBtn = document.getElementById('submit-btn');
+
+            // Validation functions
+            function isValidTwitterUrl(url) {
+                const twitterRegex = /^https?:\/\/(?:www\.)?(?:x\.com|twitter\.com)\/[a-zA-Z0-9_]{1,15}\/?$/;
+                return twitterRegex.test(url);
+            }
+
+            function isValidSolanaAddress(address) {
+                // Basic Solana address validation (32-44 base58 characters)
+                const solanaRegex = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/;
+                return solanaRegex.test(address);
+            }
+
+            // Real-time validation
+            twitterInput.addEventListener('input', function() {
+                if (twitterInput.value && !isValidTwitterUrl(twitterInput.value)) {
+                    twitterInput.classList.add('input-error');
+                    twitterError.style.display = 'block';
+                } else {
+                    twitterInput.classList.remove('input-error');
+                    twitterError.style.display = 'none';
+                }
+            });
+
+            walletInput.addEventListener('input', function() {
+                if (walletInput.value && !isValidSolanaAddress(walletInput.value)) {
+                    walletInput.classList.add('input-error');
+                    walletError.style.display = 'block';
+                } else {
+                    walletInput.classList.remove('input-error');
+                    walletError.style.display = 'none';
+                }
+            });
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Get form values
+                const idea = document.getElementById('idea').value;
+                const twitter = twitterInput.value;
+                const wallet = walletInput.value;
+                
+                // Final validation
+                let isValid = true;
+                
+                if (!isValidTwitterUrl(twitter)) {
+                    twitterInput.classList.add('input-error');
+                    twitterError.style.display = 'block';
+                    isValid = false;
+                }
+                
+                if (!isValidSolanaAddress(wallet)) {
+                    walletInput.classList.add('input-error');
+                    walletError.style.display = 'block';
+                    isValid = false;
+                }
+                
+                if (!isValid) {
+                    return;
+                }
+                
+                // Extract Twitter handle from URL
+                const twitterHandle = twitter.split('/').pop().replace('@', '');
+                
+                // Create new idea card
+                const ideaCard = document.createElement('div');
+                ideaCard.className = 'idea-card';
+                ideaCard.innerHTML = `
+                    <div class="idea-text">${idea}</div>
+                    <div class="idea-meta">
+                        <a href="${twitter}" target="_blank" class="twitter-handle">@${twitterHandle}</a>
+                        <a href="https://solscan.io/account/${wallet}" target="_blank" class="wallet">${wallet.substring(0, 6)}...${wallet.substring(wallet.length - 5)}</a>
+                    </div>
+                `;
+                
+                // Add to top of container
+                ideasContainer.insertBefore(ideaCard, ideasContainer.firstChild);
+                
+                // Add pulse animation to the terminal
+                const terminal = document.querySelector('.idea-terminal');
+                terminal.classList.add('pulse');
+                setTimeout(() => {
+                    terminal.classList.remove('pulse');
+                }, 1200);
+                
+                // Clear form
+                form.reset();
+                twitterError.style.display = 'none';
+                walletError.style.display = 'none';
+            });
+        });
+    </script>
+</body>
+</html>
